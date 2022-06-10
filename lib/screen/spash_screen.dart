@@ -24,12 +24,13 @@ class _SplashState extends State<Splash> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
           Container(
-            width: 500,
-          height: 400,
+          //   width: 500,
+          // height: 400,
           color:Colors.white,
             decoration: BoxDecoration(color: Colors.white),
             child: Column(
@@ -56,7 +57,7 @@ class _SplashState extends State<Splash> {
                         Text(
                           "Менеджер кодов замка",
                           style: TextStyle(
-                            color: Colors.grey,
+                            color: Colors.black,
                             fontSize: 20.0,
                           ),
                         ),

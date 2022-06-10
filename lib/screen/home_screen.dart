@@ -13,10 +13,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          width: 500,
-          height: 400,
+          // width: 500,
+          // height: 400,
           color:Colors.white,
           margin: const EdgeInsets.all(15),
           child: Column(
@@ -37,9 +38,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [Spacer(), _buttonResponse()],
               ),
             ),
+            Row(
+          children: [
             Container(
-              margin: const EdgeInsets.symmetric(vertical: 15),
-              child: _lisstResult()
+              child: Text("Телефон"),
+            ),
+            SizedBox(width: 20,),
+            Container(
+              child: Text(" Дата с "),
+            ),
+            SizedBox(width: 20,),
+            Container(
+              child: Text(" Дата по "),
+            ),
+            SizedBox(width: 20,),
+            Container(
+              child: Text("Код замка"),
+            ),
+          ],
+        ),
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 15),
+                child: _lisstResult()
+              ),
             ),
           ]),
         ),
@@ -53,8 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           child: Text(title),
         ),
-        Container(
-          child: _check(title),
+        SizedBox(width: 20,),
+        Expanded(
+          child: Container(
+            child: _check(title),
+          ),
         )
       ],
     );
@@ -112,8 +137,29 @@ class _HomeScreenState extends State<HomeScreen> {
     return ListView.builder(
       itemCount: 2,
       itemBuilder: (context, index) {
-        return Container(
-          child: Text("+7932== ${index} - 283733"),
+        return Column(
+          children: [
+            Divider(),
+            Row(
+              children: [
+                Container(
+                  child: Text("+7932== ${index} - 283733"),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text("2022.03.2"),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text("2022.05.12"),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text("3455023"),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
