@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../button_widget.dart';
+import '../provider/data_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,6 +12,25 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  
+  late DataProviderApp  providerSetttings;
+
+  List tableList = List.empty(growable: true);
+
+  @override
+  void initState() {
+    providerSetttings = Provider.of<DataProviderApp>(context, listen: false);
+    providerSetttings.startP();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    providerSetttings.closeP();
+    providerSetttings.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,13 +45,17 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-            Container(
+              Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-                child: _choiseLine("Выберите корпус")
+                child: _choiseLine("Выберите отелей", providerSetttings.getHotels())
             ),
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-              child: _choiseLine("Выберите номер"),
+                child: _choiseLine("Выберите корпус", providerSetttings.getBuilders())
+            ),
+            Container(
+                margin: const EdgeInsets.symmetric(vertical: 15),
+              child: _choiseLine("Выберите номер", providerSetttings.getRooms()),
             ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
@@ -69,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _choiseLine(String title) {
+  Widget _choiseLine(String title, Future objectEvent) {
     return Row(
       children: [
         Container(
@@ -78,7 +103,19 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(width: 20,),
         Expanded(
           child: Container(
-            child: _check(title),
+            child: FutureBuilder(
+              future: objectEvent,
+              builder: (context, AsyncSnapshot assync) {
+                if(assync.hasData && assync.data != null){
+                  return _check(title, assync.data);  
+                }
+                return SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator()
+                );
+              }
+            ),
           ),
         )
       ],
@@ -87,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String? _dropDownValue;
 
-  Widget _check(String hint) {
+  Widget _check(String hint, List listData) {
     return DropdownButton(
       hint: _dropDownValue == null
           ? Text(hint)
@@ -98,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
       isExpanded: true,
       iconSize: 30.0,
       style: TextStyle(color: Colors.green),
-      items: ['One', 'Two', 'Three'].map(
+      items: listData.map(
         (val) {
           return DropdownMenuItem<String>(
             value: val,
@@ -118,7 +155,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buttonResponse() {
     return ButtomAnimationTupCustom(
-      tap: () {},
+      tap: () async {
+        var result = await providerSetttings.getPass();
+        if(result != null)
+          setState(() {
+            tableList = result;
+          });
+      },
       child: Container(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -135,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _lisstResult() {
     return ListView.builder(
-      itemCount: 2,
+      itemCount: tableList.length,
       itemBuilder: (context, index) {
         return Column(
           children: [

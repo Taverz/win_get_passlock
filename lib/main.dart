@@ -3,11 +3,20 @@ import 'dart:io';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
 import 'package:desktop_window/desktop_window.dart';
+import 'package:provider/provider.dart';
 
+import 'provider/data_provider.dart';
+import 'provider/settings_app.dart';
 import 'screen/home_screen.dart';
+import 'screen/spash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await _settingsWindow();
+  runApp(const MyApp());
+}
+
+_settingsWindow() async{
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     // DesktopWindow.setWindowTitle('Flutter Demo');
     // DesktopWindow.setWindowMinSize(const Size(400, 300));
@@ -16,7 +25,6 @@ void main() async {
     await DesktopWindow.setMinWindowSize(Size(500,500));
     await DesktopWindow.setMaxWindowSize(Size(700,700));
   }
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -25,15 +33,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ServiceBook code lock',
-      debugShowCheckedModeBanner: false,
-      color: Colors.white,
-      theme: ThemeData(
-          backgroundColor: Colors.white,
-        primarySwatch: Colors.green,
+    return MultiProvider(
+      providers: [
+       ChangeNotifierProvider(create: (context)=> DataProviderApp()),
+       ChangeNotifierProvider(create: (context)=> SettingsProviderApp())
+      ],
+      child: MaterialApp(
+        title: 'ServiceBook code lock',
+        debugShowCheckedModeBanner: false,
+        color: Colors.white,
+        theme: ThemeData(
+            backgroundColor: Colors.white,
+          primarySwatch: Colors.green,
+        ),
+        home: Splash(),
       ),
-      home: HomeScreen(),
     );
   }
 }
