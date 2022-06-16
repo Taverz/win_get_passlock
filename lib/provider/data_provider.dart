@@ -7,10 +7,10 @@ class DataProviderApp extends ChangeNotifier{
 
   ApiApp? _api;
   String? _tokenShelter;
-  List _listHotels = List.empty(growable: true);
-  List _listBuilders = List.empty(growable: true);
-  List _listRooms = List.empty(growable: true);
-  List _resultTablePass = List.empty(growable: true);
+  List? _listHotels = List.empty(growable: true);
+  List? _listBuilders = List.empty(growable: true);
+  List? _listRooms = List.empty(growable: true);
+  List? _resultTablePass = List.empty(growable: true);
 
   init(String tokenS){
     this._tokenShelter = tokenS;
@@ -26,11 +26,11 @@ class DataProviderApp extends ChangeNotifier{
   Future<List?> getHotels({VoidCallback? errore}) async {
     if(this._api != null){
       try{
-        var result = await this._api!.getHotels();
+        Either result = await this._api!.getHotels();
         if(result.isLeft()){
-          this._listHotels = (result as Left).toOption().toNullable();
+          this._listHotels = (result as Left).value ; //.toOption().toNullable(); 
         }else if(result.isRight()){
-          ServerException resErr = ((result as Right).toOption().toNullable() as ServerException);
+          ServerException resErr = (result.toOption().toNullable() as ServerException);
          if(errore != null){
             errore();
           }
@@ -56,7 +56,7 @@ class DataProviderApp extends ChangeNotifier{
       try{
         var result = await this._api!.getBuilder(id??'');
         if(result.isLeft()){
-          this._listBuilders = (result as Left).toOption().toNullable();
+          this._listBuilders =  (result as Left).value ; //.toOption().toNullable();
         }else if(result.isRight()){
           ServerException resErr = ((result as Right).toOption().toNullable() as ServerException);
           if(errore != null){
@@ -83,7 +83,7 @@ class DataProviderApp extends ChangeNotifier{
       try{
         var result = await this._api!.getRooms(id??'');
         if(result.isLeft()){
-          this._listRooms = (result as Left).toOption().toNullable();
+          this._listRooms =  (result as Left).value ; //.toOption().toNullable();
         }else if(result.isRight()){
           ServerException resErr = ((result as Right).toOption().toNullable() as ServerException);
           if(errore != null){
@@ -111,7 +111,7 @@ class DataProviderApp extends ChangeNotifier{
       try{
         var result = await this._api!.getPassCode(id??'');
         if(result.isLeft()){
-          this._resultTablePass = (result as Left).toOption().toNullable();
+          this._resultTablePass =  (result as Left).value ; //.toOption().toNullable();
         }else if(result.isRight()){
           ServerException resErr = ((result as Right).toOption().toNullable() as ServerException);
           if(errore != null){

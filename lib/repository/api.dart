@@ -1,6 +1,8 @@
 
 
 
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:win_get_passlock/repository/exception.dart';
@@ -18,6 +20,7 @@ class ApiApp {
   late Dio _dio;
   ApiApp(String token){
     _dio = Dio();
+    _dio.options = BaseOptions(contentType: "application/json");
     this._tokenShelter = token;
   }
 
@@ -31,12 +34,25 @@ class ApiApp {
         "$_url$_urlPostFics$_getUrlHotels", 
         data: {'shelter_token': _tokenShelter}
       ); 
-      var result =  response.data[""];
+      String data =  response.data["hotels"];
+      List<dynamic> result = jsonDecode(data);  
       return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlHotels"));
     }
   }
+    //   {
+    // 	"hotels": "[
+    //     {\"id\":\"1\",\"name\":\"\\ufffd\\ufffd\\ufffd\\ufffd\\ufffd \\\"SHELTER\\\"\"},
+    //   {\"id\":\"2\",\"name\":\"MariChalet\"},
+    //   {\"id\":\"3\",\"name\":\"K9\"},
+    //   {\"id\":\"4\",\"name\":\"K9 Apartment\"},
+    //   {\"id\":\"5\",\"name\":\"K9\"}
+    //   ]"
+    // }
+
+
+
   Future<Either<List, ServerException>> getBuilder(String idHotels) async{
     try{
       Response response =await _dio.post(
@@ -45,12 +61,22 @@ class ApiApp {
           'shelter_token': _tokenShelter
         }
       ); 
-      var result =  response.data[""];
-      return result;
+      String data =  response.data["buildings"];
+      List<dynamic> result = jsonDecode(data);
+      return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlBuildings"));
     }
   }
+  // {
+  //   "buildings": "[
+  //     {\"id\":\"1\",\"hotel\":\"2\",\"name\":\"Korpus 1\"},
+  //     {\"id\":\"4\",\"hotel\":\"2\",\"name\":\"Korpus 2\"}
+  //     ]"
+  // }
+
+
+
   Future<Either<List, ServerException>> getRooms(String idbuilders) async{
     try{
       Response response =await _dio.post(
@@ -59,12 +85,22 @@ class ApiApp {
           'shelter_token': _tokenShelter
         }
       ); 
-      var result =  response.data[""];
-      return result;
+      String data =  response.data["rooms"];
+      List<dynamic> result = jsonDecode(data);
+      return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlRooms"));
     }
   }
+  // {
+  //   "rooms": "[
+  //     {\"id\":\"1\",\"hotel\":\"2\",\"roomkind\":\"7\",\"building\":\"1\",\"floor\":\"1\",\"number\":\"101\"},
+  //     {\"id\":\"2\",\"hotel\":\"2\",\"roomkind\":\"7\",\"building\":\"1\",\"floor\":\"1\",\"number\":\"107\"},
+  //     {\"id\":\"18\",\"hotel\":\"2\",\"roomkind\":\"6\",\"building\":\"1\",\"floor\":\"3\",\"number\":\"304\"},
+  //     {\"id\":\"19\",\"hotel\":\"5\",\"roomkind\":\"8\",\"building\":\"4\",\"floor\":\"1\",\"number\":\"101\"},
+  //     {\"id\":\"20\",\"hotel\":\"2\",\"roomkind\":\"8\",\"building\":\"4\",\"floor\":\"1\",\"number\":\"11\"}
+  //     ]"
+  // }
 
   Future<Either<List, ServerException>> getPassCode(String idRooms) async{
     try{
@@ -75,11 +111,15 @@ class ApiApp {
           'room_id': idRooms
         }
       ); 
-      var result =  response.data[""];
-      return result;
+      String data1 =  response.data;
+      String data = data1.split(' ').toString();
+      List<dynamic> result = jsonDecode(data);
+      return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlPasscode"));
     }
   }
+
+
 
 }

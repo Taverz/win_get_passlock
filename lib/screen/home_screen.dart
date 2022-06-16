@@ -13,21 +13,26 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   
-  late DataProviderApp  providerSetttings;
+  late DataProviderApp  providerData;
 
   List tableList = List.empty(growable: true);
+  
+  String? _dropDownValueHotels;
+  String? _dropDownValueBuildings;
+  String? _dropDownValueRooms;
+  String? _idRoom;
 
   @override
   void initState() {
-    providerSetttings = Provider.of<DataProviderApp>(context, listen: false);
-    providerSetttings.startP();
+    providerData = Provider.of<DataProviderApp>(context, listen: false);
+    providerData.startP();
     super.initState();
   }
 
   @override
   void dispose() {
-    providerSetttings.closeP();
-    providerSetttings.dispose();
+    providerData.closeP();
+    providerData.dispose();
     super.dispose();
   }
 
@@ -37,25 +42,47 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Container(
-          // width: 500,
-          // height: 400,
           color:Colors.white,
           margin: const EdgeInsets.all(15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+            Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-                child: _choiseLine("Выберите отелей", providerSetttings.getHotels())
+                child: _choiseLine(
+                  "Выберите отелей", 
+                  "name",
+                  providerData.getHotels(),
+                  _dropDownValueHotels,
+                  (value){
+                    _dropDownValueHotels = value;
+                  }
+                )
             ),
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-                child: _choiseLine("Выберите корпус", providerSetttings.getBuilders())
+                child: _choiseLine(
+                  "Выберите корпус", 
+                  "name",
+                  providerData.getBuilders(),
+                  _dropDownValueBuildings,
+                  (value){
+                    _dropDownValueBuildings = value;
+                  }
+                )
             ),
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
-              child: _choiseLine("Выберите номер", providerSetttings.getRooms()),
+              child: _choiseLine(
+                "Выберите номер", 
+                "number",
+                providerData.getRooms(),
+                _dropDownValueRooms,
+                (value){
+                  _dropDownValueRooms = value;
+                }
+              ),
             ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 15),
@@ -64,24 +91,24 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Row(
-          children: [
-            Container(
-              child: Text("Телефон"),
+              children: [
+                Container(
+                  child: Text("Телефон"),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text(" Дата с "),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text(" Дата по "),
+                ),
+                SizedBox(width: 20,),
+                Container(
+                  child: Text("Код замка"),
+                ),
+              ],
             ),
-            SizedBox(width: 20,),
-            Container(
-              child: Text(" Дата с "),
-            ),
-            SizedBox(width: 20,),
-            Container(
-              child: Text(" Дата по "),
-            ),
-            SizedBox(width: 20,),
-            Container(
-              child: Text("Код замка"),
-            ),
-          ],
-        ),
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
@@ -94,7 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _choiseLine(String title, Future objectEvent) {
+  Widget _choiseLine(
+    String title,
+    String field,
+    Future objectEvent,
+    String? value,
+    Function(String) valueFunc
+  ) {
     return Row(
       children: [
         Container(
@@ -103,11 +136,13 @@ class _HomeScreenState extends State<HomeScreen> {
         SizedBox(width: 20,),
         Expanded(
           child: Container(
-            child: FutureBuilder(
+           child: FutureBuilder(
               future: objectEvent,
               builder: (context, AsyncSnapshot assync) {
                 if(assync.hasData && assync.data != null){
-                  return _check(title, assync.data);  
+                  return _check(title, field, assync.data, value, (value){
+                    valueFunc(value);
+                  });  
                 }
                 return SizedBox(
                   width: 40,
@@ -122,14 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String? _dropDownValue;
 
-  Widget _check(String hint, List listData) {
-    return DropdownButton(
-      hint: _dropDownValue == null
+  Widget _check(String hint, String field, List listData, String? value, Function(String) valueFunc) {
+    return DropdownButton<Map>(
+      hint: value == null
           ? Text(hint)
           : Text(
-              _dropDownValue ?? "",
+              value ,
               style: TextStyle(color: Colors.green),
             ),
       isExpanded: true,
@@ -137,16 +171,19 @@ class _HomeScreenState extends State<HomeScreen> {
       style: TextStyle(color: Colors.green),
       items: listData.map(
         (val) {
-          return DropdownMenuItem<String>(
+          return DropdownMenuItem<Map>(
             value: val,
-            child: Text(val),
+            child: Text(val[field].toString()),
           );
         },
       ).toList(),
       onChanged: (val) {
         setState(
           () {
-            if (val != null) _dropDownValue = val.toString();
+            if (val != null){
+              valueFunc(value = val[field].toString()); //value = val.toString();
+              if("Выберите номер" == hint) _idRoom = val["id"];
+            } 
           },
         );
       },
@@ -156,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buttonResponse() {
     return ButtomAnimationTupCustom(
       tap: () async {
-        var result = await providerSetttings.getPass();
+        var result = await providerData.getPass(id: _idRoom);
         if(result != null)
           setState(() {
             tableList = result;
@@ -186,19 +223,19 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 Container(
-                  child: Text("+7932== ${index} - 283733"),
+                  child: Text("${tableList}"),
                 ),
                 SizedBox(width: 20,),
                 Container(
-                  child: Text("2022.03.2"),
+                  child: Text("${tableList}"),
                 ),
                 SizedBox(width: 20,),
                 Container(
-                  child: Text("2022.05.12"),
+                  child: Text("${tableList}"),
                 ),
                 SizedBox(width: 20,),
                 Container(
-                  child: Text("3455023"),
+                  child: Text("${tableList}"),
                 ),
               ],
             ),
