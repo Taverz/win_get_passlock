@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../provider/data_provider.dart';
 import '../provider/settings_app.dart';
 import 'home_screen.dart';
+import 'wind/create.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({ Key? key }) : super(key: key);
@@ -24,8 +25,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       body:SafeArea(
         child: Container(
+          margin:const EdgeInsets.all(25),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              butWind(),
               Container(
                 child: _textFields(),
               ),

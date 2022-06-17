@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:desktop_multi_window/desktop_multi_window.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +11,7 @@ import 'package:win_get_passlock/screen/settings.dart';
 import '../provider/data_provider.dart';
 import '../provider/settings_app.dart';
 import 'home_screen.dart';
+import 'wind/create.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -21,7 +24,9 @@ class _SplashState extends State<Splash> {
 
 
   _load(BuildContext context) async{
+
     SettingsProviderApp  providerSetttings = Provider.of<SettingsProviderApp>(context, listen: false);
+    await providerSetttings.initData();
     tokenNoNull = await providerSetttings.noNullShelterToken();
     Timer(
         Duration(seconds: 2),
@@ -50,12 +55,11 @@ class _SplashState extends State<Splash> {
 
   Widget build(BuildContext context) {
     _load(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
         child: Container(
-        //   width: 500,
-        // height: 400,
           decoration: BoxDecoration(color: Colors.white),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -66,6 +70,7 @@ class _SplashState extends State<Splash> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
+                      butWind(),
                       CircleAvatar(
                         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
                         radius: 40.0,

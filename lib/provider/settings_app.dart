@@ -1,40 +1,74 @@
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences_windows/shared_preferences_windows.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProviderApp extends ChangeNotifier{
 
-  final SharedPreferencesWindows prefs = SharedPreferencesWindows();
+  SharedPreferences? prefs ;
 
   String? _shelterToken;
   String? get sheltertoken {
     return _shelterToken;
   }
 
+  initData() async{
+      prefs =await SharedPreferences.getInstance();
+  }
+
   Future<bool> noNullShelterToken() async{
-    Map<String, Object> resultData = await prefs.getAll();
-    String? token = resultData["token"].toString();
-    if(token == null || token == ""){
-      return false;
+    if(prefs != null){
+      final String? token = prefs!.getString('token');
+      if(token == null || token == ""){
+        return false;
+      }else{
+        this._shelterToken = token;
+        return true;
+      }  
     }else{
-      this._shelterToken = token;
-      return true;
+      return false;
     }
+    
+
+
+    // Map<String, Object> resultData = await prefs.getAll();
+    // String? token = resultData["token"].toString();
+    // if(token == null || token == ""){
+    //   return false;
+    // }else{
+    //   this._shelterToken = token;
+    //   return true;
+    // }
   }
 
   Future<String?> getShelterToken() async{
-    Map<String, Object> resultData = await prefs.getAll();
-    String? token = resultData["token"].toString();
-    if(token == null || token == ""){
-      return null;
-    }else{
-      this._shelterToken = token;
-      return token;
+    if(prefs != null){
+      final String? token = prefs!.getString('token');
+      if(token == null || token == ""){
+        return null;
+      }else{
+        this._shelterToken = token;
+        return token;
+      }
     }
+
+
+    // Map<String, Object> resultData = await prefs.getAll();
+    // String? token = resultData["token"].toString();
+    // if(token == null || token == ""){
+    //   return null;
+    // }else{
+    //   this._shelterToken = token;
+    //   return token;
+    // }
   }
 
   setShelterToken(String token) async{
-    await prefs.setValue('String', 'token', token);
-    this._shelterToken = token;
+    if(prefs != null){
+      await prefs!.setString('token', 'Start');
+      this._shelterToken = token;
+    }
+
+    // await prefs.setValue('String', 'token', token);
+    // this._shelterToken = token;
   }
 
 }
