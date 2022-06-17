@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:win_get_passlock/screen/settings.dart';
 
 import '../button_widget.dart';
 import '../provider/data_provider.dart';
@@ -115,6 +116,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: _lisstResult()
               ),
             ),
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => SettingsScreen()));
+              },
+              child: Container(
+
+                child:const Icon(Icons.settings, color: Colors.amber, size: 40,),
+                //child: Text("Настройки"),
+              ),
+            )
           ]),
         ),
       ),

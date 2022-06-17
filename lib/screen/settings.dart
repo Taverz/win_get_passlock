@@ -30,6 +30,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+               GestureDetector(
+              onTap: (){
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                child:const Icon(Icons.arrow_back, color: Colors.amber, size: 40,),
+                //child: Text("Настройки"),
+              ),
+            ),
               butWind(),
               Container(
                 child: _textFields(),
