@@ -2,7 +2,7 @@ import 'dart:io';
 
 // import 'package:desktop_window/desktop_window.dart';
 import 'package:flutter/material.dart';
-// import 'package:desktop_window/desktop_window.dart';
+import 'package:desktop_window/desktop_window.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/data_provider.dart';
@@ -12,19 +12,19 @@ import 'screen/spash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //await _settingsWindow();
+   _settingsWindow();
   runApp(const MyApp());
 }
 
 _settingsWindow() async{
-  // if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-  //   // DesktopWindow.setWindowTitle('Flutter Demo');
-  //   // DesktopWindow.setWindowMinSize(const Size(400, 300));
-  //   // DesktopWindow.setWindowMaxSize(Size.infinite);
-  //   await DesktopWindow.setWindowSize(Size(550,550));
-  //   await DesktopWindow.setMinWindowSize(Size(500,500));
-  //   await DesktopWindow.setMaxWindowSize(Size(700,700));
-  // }
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    // DesktopWindow.setWindowTitle('Flutter Demo');
+    // DesktopWindow.setWindowMinSize(const Size(400, 300));
+    // DesktopWindow.setWindowMaxSize(Size.infinite);
+    await DesktopWindow.setWindowSize(Size(550,550));
+    await DesktopWindow.setMinWindowSize(Size(500,500));
+    await DesktopWindow.setMaxWindowSize(Size(700,700));
+  }
 }
 
 class MyApp extends StatelessWidget {
