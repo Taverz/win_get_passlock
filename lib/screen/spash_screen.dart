@@ -70,7 +70,7 @@ class _SplashState extends State<Splash> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      butWind(),
+                      // butWind(),
                       CircleAvatar(
                         backgroundColor: Color.fromRGBO(250, 250, 250, 1),
                         radius: 40.0,

@@ -70,7 +70,7 @@ class __IntroScreenState extends State<_IntroScreen> {
             Container(
                 margin: const EdgeInsets.symmetric(vertical: 15),
                 child: _choiseLine(
-                  "Выберите отелей", 
+                  "Выберите отель", 
                   "name",
                   providerData.getHotels(),
                   _dropDownValueHotels,

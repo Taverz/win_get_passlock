@@ -83,7 +83,7 @@ class SettingsProviderApp extends ChangeNotifier{
       }
     }else 
       if(prefs != null){
-        await prefs!.setString('token', 'Start');
+        await prefs!.setString('token', token);
         this._shelterToken = token;
     }
   }
