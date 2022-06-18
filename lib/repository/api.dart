@@ -113,7 +113,7 @@ class ApiApp {
       ); 
       String data1 =  response.data;
       String data = data1.split(' ').toString();
-      List<dynamic> result = jsonDecode(data);
+      List<dynamic> result = data1.split(' '); //jsonDecode(data);
       return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlPasscode"));
