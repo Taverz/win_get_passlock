@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.win_get_passlock">
+ <uses-permission android:name="android.permission.INTERNET"/>
+
    <application
         android:label="win_get_passlock"
         android:name="${applicationName}"
