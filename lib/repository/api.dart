@@ -111,7 +111,7 @@ class ApiApp {
           'room_id': idRooms
         }
       ); 
-      String data1 =  response.data;
+      String data1 =  response.data.toString();
       String data = data1.split(' ').toString();
       List<dynamic> result = data1.split(' '); //jsonDecode(data);
       return Left(result);
