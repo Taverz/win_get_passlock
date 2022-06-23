@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:win_get_passlock/screen/settings.dart';
@@ -81,8 +83,12 @@ class __IntroScreenState extends State<_IntroScreen> {
                       _renderFinish_Hotel = false;
                       _renderFinish_Buildings = false;
                       _renderFinish_Rooms = false;
+                      _dropDownValueBuildings = null;
                     } 
-                    _renderFinish_Hotel = true;
+                    // Timer(Duration(seconds: 1), (){
+                      _renderFinish_Hotel = true;
+                    // });
+                    
                    
                   },
                 (renderFinish){
@@ -102,8 +108,18 @@ class __IntroScreenState extends State<_IntroScreen> {
                   providerData.getBuilders(id:_idHotel),
                   _dropDownValueBuildings,
                   (value){
-                    _dropDownValueBuildings = value;
-                     _renderFinish_Buildings = true;
+                   _dropDownValueBuildings = value;
+                    if(_dropDownValueBuildings == true){
+                      _renderFinish_Buildings = false;
+                      _renderFinish_Rooms = false;
+                      _dropDownValueRooms = null;
+                    } 
+                    // Timer(Duration(seconds: 1), (){
+                      
+                      _renderFinish_Buildings = true;
+                    // });
+                    _dropDownValueRooms = null;
+                    
                   },
                 (renderFinish){
                   // _renderFinish_Buildings = renderFinish;
