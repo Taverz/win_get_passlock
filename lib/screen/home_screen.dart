@@ -4,6 +4,7 @@ import 'package:win_get_passlock/screen/settings.dart';
 
 import '../button_widget.dart';
 import '../provider/data_provider.dart';
+import 'home_screen2.dart';
 
 class HomeScreen extends StatelessWidget {
   
@@ -12,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: _IntroScreen()
+        child: _IntroScreen() //_IntroScreen()
       ),
     );
   }

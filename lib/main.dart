@@ -10,7 +10,7 @@ import 'provider/settings_app.dart';
 import 'screen/home_screen.dart';
 import 'screen/spash_screen.dart';
 
-void main() async {
+void main()  {
   WidgetsFlutterBinding.ensureInitialized();
    _settingsWindow();
   runApp(const MyApp());
