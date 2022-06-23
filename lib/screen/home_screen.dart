@@ -77,7 +77,13 @@ class __IntroScreenState extends State<_IntroScreen> {
                   _dropDownValueHotels,
                   (value){
                     _dropDownValueHotels = value;
+                    if(_renderFinish_Hotel == true){
+                      _renderFinish_Hotel = false;
+                      _renderFinish_Buildings = false;
+                      _renderFinish_Rooms = false;
+                    } 
                     _renderFinish_Hotel = true;
+                   
                   },
                 (renderFinish){
                   // _renderFinish_Hotel = renderFinish;
@@ -193,7 +199,44 @@ class __IntroScreenState extends State<_IntroScreen> {
            child: FutureBuilder(
               future: objectEvent,
               builder: (context, AsyncSnapshot assync) {
+                
                 if(assync.hasData && assync.data != null){
+                  if(title == "Выберите корпус"){
+                    List listt = assync.data;
+                    List listData = listt.where((element) {
+                          if(element['hotel'] == _idHotel){
+                            return true;
+                          }else{
+                            return false;
+                          } 
+                     }).toList();
+                    finishRender(true);
+                    return _check(title, field, listData, value, (value){
+                      valueFunc(value);
+                    },
+                    (value){
+                      valueId(value);
+                    }
+                    );
+                  }
+                  if(title == "Выберите номер"){
+                    List listt = assync.data;
+                    List listData = listt.where((element) {
+                          if(element['building'] == _idBuilding){
+                            return true;
+                          }else{
+                            return false;
+                          } 
+                     }).toList();
+                    finishRender(true);
+                    return _check(title, field,listData, value, (value){
+                      valueFunc(value);
+                    },
+                    (value){
+                      valueId(value);
+                    }
+                    );
+                  }
                   finishRender(true);
                   return _check(title, field, assync.data, value, (value){
                     valueFunc(value);
