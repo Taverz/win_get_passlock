@@ -111,15 +111,20 @@ class ApiApp {
           'room_id': idRooms
         }
       ); 
+      var data33 = response.data;
       String data1 =  response.data.toString();
-      String data = data1.split(' ').toString();
-      List<dynamic> result = data1.split(' '); //jsonDecode(data);
+      // String data = data1.split(' ').toString();
+      List<dynamic> result = [];
+      result.add(data33);
       return Left(result);
     }catch(e){
       return Right(ServerException(exception: e.toString(), url: "$_url$_urlPostFics$_getUrlPasscode"));
     }
   }
 
-
+// {id: 66, name: 123, code: 0707125, code_id: 171531036, phone: 89525612028, 
+//who_issued: test, period_from: 2022-06-17 08:08:59, period_to: 2022-06-18 09:00:00, 
+//factual_date: 2022-06-17 08:08:59, room_id: 4, hotel_id: 2, status: 1, created_at: 2022-06-17T08:10:33.000000Z,
+// updated_at: 2022-06-17T08:10:33.000000Z, uun: null}
 
 }

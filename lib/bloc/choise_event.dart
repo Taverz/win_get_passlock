@@ -11,15 +11,15 @@ class ChoiseInitEvent extends ChoiseEvent{
 }
 
 class ChoiseHotelEvent extends ChoiseEvent{
-  final String? idHotel;
+  final Map<dynamic, dynamic>? idHotel;
   ChoiseHotelEvent(this.idHotel);
 }
 class ChoiseBuildingEvent extends ChoiseEvent{
-  final String? idBuilding;
+  final Map<dynamic, dynamic>? idBuilding;
   ChoiseBuildingEvent(this.idBuilding);
 }
 class ChoiseRoomEvent extends ChoiseEvent{
-   final String? idRoom;
+  final Map<dynamic, dynamic>? idRoom;
   ChoiseRoomEvent(this.idRoom);
 }
 

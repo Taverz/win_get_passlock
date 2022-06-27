@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:desktop_window/desktop_window.dart';
 import 'package:provider/provider.dart';
 
+import 'provider/coise_provider.dart';
 import 'provider/data_provider.dart';
 import 'provider/settings_app.dart';
 import 'screen/home_screen.dart';
@@ -36,7 +37,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
        ChangeNotifierProvider(create: (context)=> DataProviderApp()),
-       ChangeNotifierProvider(create: (context)=> SettingsProviderApp())
+       ChangeNotifierProvider(create: (context)=> SettingsProviderApp()),
+       ChangeNotifierProvider(create: (context)=>ChoiseProvider())
       ],
       child: MaterialApp(
         title: 'ServiceBook code lock',

@@ -14,11 +14,11 @@ class ChooiseBloc  extends Bloc<ChoiseEvent, ChoiseState>{
     // on<AccomodationChoiceYesEvent>(_mapGetCategoriesEventToState);
     // on<AccomodationChoiceYesEvent>(_mapChoiceYes);
 
-    on<ChoiseInitEvent>(_initEv); 
+    on<ChoiseInitEvent>(initEv); 
 
-    on<ChoiseHotelEvent>(_chooiseHotel); //((event, emit) => emit(ChoiseStateHomeState()));
-    on<ChoiseBuildingEvent>(_chooiseBuilding); //((event, emit) => emit(ChoiseStateBuildingState()));
-    on<ChoiseRoomEvent>(_chooiseRoom); //((event, emit) => emit(ChoiseStateRoomState()));
+    on<ChoiseHotelEvent>(chooiseHotel); //((event, emit) => emit(ChoiseStateHomeState()));
+    on<ChoiseBuildingEvent>(chooiseBuilding); //((event, emit) => emit(ChoiseStateBuildingState()));
+    on<ChoiseRoomEvent>(chooiseRoom); //((event, emit) => emit(ChoiseStateRoomState()));
 
     // on<BasketErrorEvent>((event, emit) => emit(BasketErrorState(message: (event as BasketErrorEvent).message)));
     // on<BasketConfirmEvent>(_confirmBasket);
@@ -37,68 +37,71 @@ class ChooiseBloc  extends Bloc<ChoiseEvent, ChoiseState>{
 
   DataProviderApp?  providerData;
 
-  _initEv(ChoiseInitEvent event, Emitter<ChoiseState> emit)async {
+  initEv(ChoiseInitEvent event, Emitter<ChoiseState> emit)async {
     providerData = Provider.of<DataProviderApp>(event.contextW, listen: false);
     if(providerData != null){
       providerData!.startP();
-      await _getHome();
+      await getHome();
     }
   }
 
-  _getHome() async{
+  getHome() async{
     var result =await  providerData!.getHotels();
     _hotels = result;
     //render(_hotelChoise);
     // if(_hotelChoise != null){
-    //   _chooiseHotel(ChoiseHotelEvent(_hotelChoise!["id"]), emit );
+    //   chooiseHotel(ChoiseHotelEvent(_hotelChoise!["id"]), emit );
     // }else{
     //   _hotelChoise = null;
     //   _buildingChoise = null;
     //   _roomChoise = null;
-    //   _chooiseHotel(ChoiseHotelEvent(null), emit );
+    //   chooiseHotel(ChoiseHotelEvent(null), emit );
     // }
     ///render
-    emit(ChoiseStateInitState());
+    emit(ChoiseStateInitState2(_hotels, null));
   }
 
-  _chooiseHotel(ChoiseHotelEvent event, Emitter<ChoiseState> emit) async{
-    _hotelChoise = {"id":event.idHotel};
-    var result =await  providerData!.getBuilders(id: event.idHotel);
+  chooiseHotel(ChoiseHotelEvent event, Emitter<ChoiseState> emit) async{
+    _hotelChoise = event.idHotel;
+    var result =await  providerData!.getBuilders(id: event.idHotel!["id"]);
     _buildings = result;
     
     if(_buildingChoise != null){
       ///render
-      emit(ChoiseStateHotelState(_hotelChoise!["name"]));  
-      _chooiseBuilding(ChoiseBuildingEvent(_buildingChoise!["id"]), emit);
+      emit(ChoiseStateInitState2(_hotels, _hotelChoise));
+      emit(ChoiseStateHotelState(_hotelChoise, _buildings));  
+      // chooiseBuilding(ChoiseBuildingEvent(_buildingChoise), emit);
     }else{
       _hotelChoise = null;
       _buildingChoise = null;
       _roomChoise = null;
-      _chooiseBuilding(ChoiseBuildingEvent(null), emit);
+      emit(ChoiseStateInitState2(_hotels, _hotelChoise));
+      emit(ChoiseStateHotelState(_hotelChoise, _buildings));  
+      //chooiseBuilding(ChoiseBuildingEvent(null), emit);
     }
   }
 
-  _chooiseBuilding(ChoiseBuildingEvent event, Emitter<ChoiseState> emit) async{
-    _buildingChoise = {"id":event.idBuilding};
-    var result = await  providerData!.getRooms(id: event.idBuilding);
+  chooiseBuilding(ChoiseBuildingEvent event, Emitter<ChoiseState> emit) async{
+    _buildingChoise = event.idBuilding;
+    var result = await  providerData!.getRooms(id: event.idBuilding!["id"]);
     _rooms = result;
     
     if(_roomChoise != null){
       ///render
-      emit(ChoiseStateBuildingState(_buildingChoise!['name']));
-      _chooiseRoom(ChoiseRoomEvent(_roomChoise!['id']), emit);
+      emit(ChoiseStateBuildingState(_buildingChoise, _rooms));
+      chooiseRoom(ChoiseRoomEvent(_roomChoise), emit);
     }
   }
 
-  _chooiseRoom(ChoiseRoomEvent event, Emitter<ChoiseState> emit) async{
-    _roomChoise = {"number":event.idRoom};
+  chooiseRoom(ChoiseRoomEvent event, Emitter<ChoiseState> emit) async{
+    _roomChoise = event.idRoom;
     if(_roomChoise !=null){
       ///render
-      emit(ChoiseStateRoomState(_roomChoise!['number']));
+      emit(ChoiseStateRoomState(_roomChoise));
     }
   }
 
-  _getPassCode(ChoiseRoomEvent event, Emitter<ChoiseState> emit)async{
+  getPassCode(ChoiseRoomEvent event, Emitter<ChoiseState> emit)async{
     var result = await  providerData!.getPass(id: _roomChoise!['id']);
     if(result != null){
       ///render
