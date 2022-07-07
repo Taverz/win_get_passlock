@@ -11,6 +11,7 @@ import 'package:win_get_passlock/screen/settings.dart';
 import '../provider/data_provider.dart';
 import '../provider/settings_app.dart';
 import 'home_screen.dart';
+import 'home_screen2.dart';
 import 'wind/create.dart';
 
 class Splash extends StatefulWidget {
@@ -41,7 +42,10 @@ class _SplashState extends State<Splash> {
               providerSetttings.init(tokenS);
               providerSetttings.startP();
               Navigator.push(
-                context, MaterialPageRoute(builder: (_) => HomeScreen()));  
+                context, MaterialPageRoute(builder: (_) => 
+                MyWidget()
+                //HomeScreen()
+                ));  
             }
             
           }else{
