@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: _IntroScreen() //_IntroScreen()
+        child: ScreenMain2() //_IntroScreen()
       ),
     );
   }
